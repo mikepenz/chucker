@@ -1,9 +1,6 @@
 package com.chuckerteam.chucker.internal.support
 
-import okio.Buffer
-import okio.Okio
-import okio.Source
-import okio.Timeout
+import okio.*
 import java.io.File
 import java.io.IOException
 
@@ -21,7 +18,7 @@ internal class TeeSource(
     private val callback: Callback,
     private val readBytesLimit: Long = Long.MAX_VALUE
 ) : Source {
-    private val sideStream = Okio.buffer(Okio.sink(sideChannel))
+    private val sideStream = sideChannel.sink().buffer()
     private var totalBytesRead = 0L
     private var isFailure = false
     private var isClosed = false
@@ -59,7 +56,7 @@ internal class TeeSource(
         } else {
             bytesRead - (totalBytesRead - readBytesLimit)
         }
-        val offset = sink.size() - bytesRead
+        val offset = sink.size - bytesRead
         sink.copyTo(sideStream.buffer(), offset, byteCountToCopy)
         try {
             sideStream.emitCompleteSegments()

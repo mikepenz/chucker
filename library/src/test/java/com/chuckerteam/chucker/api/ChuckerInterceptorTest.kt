@@ -81,7 +81,7 @@ class ChuckerInterceptorTest {
         val expectedBody = image.snapshot()
 
         val client = factory.create(chuckerInterceptor)
-        val responseBody = client.newCall(request).execute().body()!!.source().readByteString()
+        val responseBody = client.newCall(request).execute().body!!.source().readByteString()
 
         assertThat(responseBody).isEqualTo(expectedBody)
     }
@@ -91,7 +91,7 @@ class ChuckerInterceptorTest {
     fun gzippedBody_isGunzippedForChucker(factory: ClientFactory) {
         val bytes = Buffer().apply { writeUtf8("Hello, world!") }
         val gzippedBytes = Buffer().apply {
-            GzipSink(this).use { sink -> sink.write(bytes, bytes.size()) }
+            GzipSink(this).use { sink -> sink.write(bytes, bytes.size) }
         }
         server.enqueue(MockResponse().addHeader("Content-Encoding: gzip").setBody(gzippedBytes))
         val request = Request.Builder().url(serverUrl).build()
@@ -109,13 +109,13 @@ class ChuckerInterceptorTest {
     fun gzippedBody_isGunzippedForTheEndConsumer(factory: ClientFactory) {
         val bytes = Buffer().apply { writeUtf8("Hello, world!") }
         val gzippedBytes = Buffer().apply {
-            GzipSink(this).use { sink -> sink.write(bytes, bytes.size()) }
+            GzipSink(this).use { sink -> sink.write(bytes, bytes.size) }
         }
         server.enqueue(MockResponse().addHeader("Content-Encoding: gzip").setBody(gzippedBytes))
         val request = Request.Builder().url(serverUrl).build()
 
         val client = factory.create(chuckerInterceptor)
-        val responseBody = client.newCall(request).execute().body()!!.source().readByteString()
+        val responseBody = client.newCall(request).execute().body!!.source().readByteString()
 
         assertThat(responseBody.utf8()).isEqualTo("Hello, world!")
     }

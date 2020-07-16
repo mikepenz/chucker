@@ -2,12 +2,13 @@ package com.chuckerteam.chucker.internal.support
 
 import com.google.common.truth.Truth.assertThat
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.junit.Test
 
 class FormattedUrlTest {
     @Test
     fun encodedUrl_withAllParams_isFormattedProperly() {
-        val url = HttpUrl.get("https://www.example.com/path/to some/resource?q=\"Hello, world!\"")
+        val url = "https://www.example.com/path/to some/resource?q=\"Hello, world!\"".toHttpUrl()
 
         val formattedUrl = FormattedUrl.fromHttpUrl(url, encoded = true)
 
@@ -21,7 +22,7 @@ class FormattedUrlTest {
 
     @Test
     fun encodedUrl_withoutPath_isFormattedProperly() {
-        val url = HttpUrl.get("https://www.example.com?q=\"Hello, world!\"")
+        val url = "https://www.example.com?q=\"Hello, world!\"".toHttpUrl()
 
         val formattedUrl = FormattedUrl.fromHttpUrl(url, encoded = true)
 
@@ -35,7 +36,7 @@ class FormattedUrlTest {
 
     @Test
     fun encodedUrl_withoutQuery_isFormattedProperly() {
-        val url = HttpUrl.get("https://www.example.com/path/to some/resource")
+        val url = "https://www.example.com/path/to some/resource".toHttpUrl()
 
         val formattedUrl = FormattedUrl.fromHttpUrl(url, encoded = true)
 
@@ -49,7 +50,7 @@ class FormattedUrlTest {
 
     @Test
     fun decodedUrl_withAllParams_isFormattedProperly() {
-        val url = HttpUrl.get("https://www.example.com/path/to some/resource?q=\"Hello, world!\"")
+        val url = "https://www.example.com/path/to some/resource?q=\"Hello, world!\"".toHttpUrl()
 
         val formattedUrl = FormattedUrl.fromHttpUrl(url, encoded = false)
 
@@ -63,7 +64,7 @@ class FormattedUrlTest {
 
     @Test
     fun decodedUrl_withoutPath_isFormattedProperly() {
-        val url = HttpUrl.get("https://www.example.com?q=\"Hello, world!\"")
+        val url = "https://www.example.com?q=\"Hello, world!\"".toHttpUrl()
 
         val formattedUrl = FormattedUrl.fromHttpUrl(url, encoded = false)
 
@@ -77,7 +78,7 @@ class FormattedUrlTest {
 
     @Test
     fun decodedUrl_withoutQuery_isFormattedProperly() {
-        val url = HttpUrl.get("https://www.example.com/path/to some/resource")
+        val url = "https://www.example.com/path/to some/resource".toHttpUrl()
 
         val formattedUrl = FormattedUrl.fromHttpUrl(url, encoded = false)
 

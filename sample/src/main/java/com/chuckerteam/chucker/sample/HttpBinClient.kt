@@ -116,7 +116,7 @@ class HttpBinClient(
             override fun onFailure(call: okhttp3.Call, e: IOException) = Unit
 
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                response.body()?.source()?.use { it.readByteString() }
+                response.body?.source()?.use { it.readByteString() }
             }
         })
     }

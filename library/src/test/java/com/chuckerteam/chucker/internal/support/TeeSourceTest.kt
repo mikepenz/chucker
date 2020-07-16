@@ -1,11 +1,7 @@
 package com.chuckerteam.chucker.internal.support
 
 import com.google.common.truth.Truth.assertThat
-import okio.Buffer
-import okio.ByteString
-import okio.Okio
-import okio.Source
-import okio.Timeout
+import okio.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.io.TempDir
@@ -23,7 +19,7 @@ class TeeSourceTest {
         val downstream = Buffer()
 
         val teeSource = TeeSource(testSource, testFile, teeCallback)
-        Okio.buffer(teeSource).use { it.readAll(downstream) }
+        teeSource.buffer().use { it.readAll(downstream) }
 
         assertThat(downstream.snapshot()).isEqualTo(testSource.content)
     }
@@ -35,7 +31,7 @@ class TeeSourceTest {
         val downstream = Buffer()
 
         val teeSource = TeeSource(testSource, testFile, teeCallback)
-        Okio.buffer(teeSource).use { it.readAll(downstream) }
+        teeSource.buffer().use { it.readAll(downstream) }
 
         assertThat(teeCallback.fileContent).isEqualTo(testSource.content)
     }
@@ -48,12 +44,12 @@ class TeeSourceTest {
         val testSource = TestSource(8_192 * repetitions)
 
         val teeSource = TeeSource(testSource, testFile, teeCallback)
-        Okio.buffer(teeSource).use { source ->
+        teeSource.buffer().use { source ->
             repeat(repetitions) { index ->
                 source.readByteString(8_192)
 
                 val subContent = testSource.content.substring(0, (index + 1) * 8_192)
-                Okio.buffer(Okio.source(testFile)).use {
+                testFile.source().buffer().use {
                     assertThat(it.readByteString()).isEqualTo(subContent)
                 }
             }
@@ -67,7 +63,7 @@ class TeeSourceTest {
         val downstream = Buffer()
 
         val teeSource = TeeSource(testSource, testFile, teeCallback, readBytesLimit = 9_999)
-        Okio.buffer(teeSource).use { it.readAll(downstream) }
+        teeSource.buffer().use { it.readAll(downstream) }
 
         val expectedContent = testSource.content.substring(0, 9_999)
         assertThat(teeCallback.fileContent).isEqualTo(expectedContent)
@@ -80,7 +76,7 @@ class TeeSourceTest {
         val downstream = Buffer()
 
         val teeSource = TeeSource(testSource, testFile, teeCallback, readBytesLimit = 9_999)
-        Okio.buffer(teeSource).use { it.readAll(downstream) }
+        teeSource.buffer().use { it.readAll(downstream) }
 
         assertThat(downstream.snapshot()).isEqualTo(testSource.content)
     }
@@ -93,7 +89,7 @@ class TeeSourceTest {
         val teeSource = TeeSource(testSource, testFile, teeCallback)
 
         assertThrows<IOException> {
-            Okio.buffer(teeSource).use { it.readByte() }
+            teeSource.buffer().use { it.readByte() }
         }
 
         assertThat(teeCallback.exception)
@@ -108,7 +104,7 @@ class TeeSourceTest {
         val testSource = TestSource(8_192 * 2)
 
         val teeSource = TeeSource(testSource, testFile, teeCallback)
-        Okio.buffer(teeSource).use { source ->
+        teeSource.buffer().use { source ->
             source.readByteString(8_192)
         }
 
@@ -123,7 +119,7 @@ class TeeSourceTest {
         val testSource = TestSource(8_192 * 2)
 
         val teeSource = TeeSource(testSource, testFile, teeCallback)
-        Okio.buffer(teeSource).use { source ->
+        teeSource.buffer().use { source ->
             source.readByteString(8_192)
         }
 
@@ -139,7 +135,7 @@ class TeeSourceTest {
         val testSource = TestSource(8_192 * repetitions)
 
         val teeSource = TeeSource(testSource, testFile, teeCallback)
-        Okio.buffer(teeSource).use { source ->
+        teeSource.buffer().use { source ->
             repeat(repetitions) { source.readByteString(8_192) }
         }
 
@@ -169,7 +165,7 @@ class TeeSourceTest {
 
     private class TestTeeCallback : TeeSource.Callback {
         private var file: File? = null
-        val fileContent get() = file?.let { Okio.buffer(Okio.source(it)).readByteString() }
+        val fileContent get() = file?.let { it.source().buffer().readByteString() }
         var exception: IOException? = null
         var isSuccess = false
             private set
