@@ -5,16 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ShareCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -31,9 +25,9 @@ import com.chuckerteam.chucker.internal.ui.MainViewModel
 import kotlinx.coroutines.launch
 
 internal class TransactionListFragment :
-    Fragment(),
-    SearchView.OnQueryTextListener,
-    TransactionAdapter.TransactionClickListListener {
+        Fragment(),
+        SearchView.OnQueryTextListener,
+        TransactionAdapter.TransactionClickListListener {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -49,9 +43,9 @@ internal class TransactionListFragment :
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         transactionsBinding = ChuckerFragmentTransactionListBinding.inflate(inflater, container, false)
 
@@ -71,12 +65,12 @@ internal class TransactionListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.transactions.observe(
-            viewLifecycleOwner,
-            Observer { transactionTuples ->
-                transactionsAdapter.setData(transactionTuples)
-                transactionsBinding.tutorialView.visibility =
-                    if (transactionTuples.isEmpty()) View.VISIBLE else View.GONE
-            }
+                viewLifecycleOwner,
+                Observer { transactionTuples ->
+                    transactionsAdapter.setData(transactionTuples)
+                    transactionsBinding.tutorialView.visibility =
+                            if (transactionTuples.isEmpty()) View.VISIBLE else View.GONE
+                }
         )
     }
 
@@ -97,21 +91,21 @@ internal class TransactionListFragment :
         return when (item.itemId) {
             R.id.clear -> {
                 requireContext().showDialog(
-                    getClearDialogData(),
-                    onPositiveClick = {
-                        viewModel.clearTransactions()
-                    },
-                    onNegativeClick = null
+                        getClearDialogData(),
+                        onPositiveClick = {
+                            viewModel.clearTransactions()
+                        },
+                        onNegativeClick = null
                 )
                 true
             }
             R.id.export -> {
                 requireContext().showDialog(
-                    getExportDialogData(),
-                    onPositiveClick = {
-                        exportTransactions()
-                    },
-                    onNegativeClick = null
+                        getExportDialogData(),
+                        onPositiveClick = {
+                            exportTransactions()
+                        },
+                        onNegativeClick = null
                 )
                 true
             }
@@ -140,23 +134,18 @@ internal class TransactionListFragment :
             } else {
                 val filecontent = ShareUtils.getStringFromTransactions(transactions, requireContext())
                 val file = viewModel.createExportFile(filecontent, cacheFileFactory)
-                val uri = FileProvider.getUriForFile(
-                    requireContext(),
-                    getString(R.string.chucker_provider_authority),
-                    file
-                )
-                shareFile(uri)
+                Toast.makeText(requireContext(), "Exported to: $file", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun shareFile(uri: Uri) {
         val sendIntent = ShareCompat.IntentBuilder.from(requireActivity())
-            .setType(requireContext().contentResolver.getType(uri))
-            .setChooserTitle(getString(R.string.chucker_share_all_transactions_title))
-            .setSubject(getString(R.string.chucker_share_all_transactions_subject))
-            .setStream(uri)
-            .intent
+                .setType(requireContext().contentResolver.getType(uri))
+                .setChooserTitle(getString(R.string.chucker_share_all_transactions_title))
+                .setSubject(getString(R.string.chucker_share_all_transactions_subject))
+                .setStream(uri)
+                .intent
 
         sendIntent.apply {
             clipData = ClipData.newRawUri("transactions", uri)
@@ -167,17 +156,17 @@ internal class TransactionListFragment :
     }
 
     private fun getClearDialogData(): DialogData = DialogData(
-        title = getString(R.string.chucker_clear),
-        message = getString(R.string.chucker_clear_http_confirmation),
-        postiveButtonText = getString(R.string.chucker_clear),
-        negativeButtonText = getString(R.string.chucker_cancel)
+            title = getString(R.string.chucker_clear),
+            message = getString(R.string.chucker_clear_http_confirmation),
+            postiveButtonText = getString(R.string.chucker_clear),
+            negativeButtonText = getString(R.string.chucker_cancel)
     )
 
     private fun getExportDialogData(): DialogData = DialogData(
-        title = getString(R.string.chucker_export),
-        message = getString(R.string.chucker_export_http_confirmation),
-        postiveButtonText = getString(R.string.chucker_export),
-        negativeButtonText = getString(R.string.chucker_cancel)
+            title = getString(R.string.chucker_export),
+            message = getString(R.string.chucker_export_http_confirmation),
+            postiveButtonText = getString(R.string.chucker_export),
+            negativeButtonText = getString(R.string.chucker_cancel)
     )
 
     companion object {

@@ -157,7 +157,6 @@ internal class TransactionPayloadFragment :
 
     private fun shouldShowSaveIcon(transaction: HttpTransaction?) = when {
         // SAF is not available on pre-Kit Kat so let's hide the icon.
-        (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) -> false
         (payloadType == PayloadType.REQUEST) -> (0L != (transaction?.requestContentLength))
         (payloadType == PayloadType.RESPONSE) -> (0L != (transaction?.responseContentLength))
         else -> true

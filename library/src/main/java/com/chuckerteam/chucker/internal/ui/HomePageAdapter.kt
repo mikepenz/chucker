@@ -19,7 +19,7 @@ internal class HomePageAdapter(context: Context, fragmentManager: FragmentManage
         ThrowableListFragment.newInstance()
     }
 
-    override fun getCount(): Int = 2
+    override fun getCount(): Int = 1
 
     override fun getPageTitle(position: Int): CharSequence? =
         context.get()?.getString(

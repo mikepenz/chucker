@@ -17,10 +17,11 @@
             app:popupTheme="@style/Chucker.Theme" />
 
         <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            android:id="@+id/tabLayout"
+            style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

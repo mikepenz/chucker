@@ -9,7 +9,7 @@ internal const val EXPORT_FILENAME = "transactions.txt"
 internal class AndroidCacheFileFactory(
     context: Context
 ) : FileFactory {
-    private val fileDir = context.cacheDir
+    private val fileDir = context.getExternalFilesDir(null)
     private val uniqueIdGenerator = AtomicLong()
 
     override fun create() = create(filename = "chucker-${uniqueIdGenerator.getAndIncrement()}")
