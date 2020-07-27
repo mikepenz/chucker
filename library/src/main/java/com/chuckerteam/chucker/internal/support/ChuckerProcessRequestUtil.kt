@@ -135,11 +135,10 @@ object ChuckerProcessRequestUtil {
                         // special handling for formBody as it will be sent as buffer which we can't intercept
                         val builder = StringBuilder()
                         for (i in 0 until orgBody.size) {
-                            if (i > 0) builder.append('&')
+                            if (i > 0) builder.append("&")
                             builder.append(orgBody.encodedName(i))
-                            builder.append('='.toInt())
+                            builder.append("=")
                             builder.append(orgBody.encodedValue(i))
-                            builder.appendln()
                         }
                         transaction.requestBody = builder.toString()
                     } else {
