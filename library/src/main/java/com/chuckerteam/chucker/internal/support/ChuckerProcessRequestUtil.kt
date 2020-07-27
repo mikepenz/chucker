@@ -17,6 +17,7 @@ package com.chuckerteam.chucker.internal.support
 
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
+import okhttp3.FormBody
 import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -130,6 +131,8 @@ object ChuckerProcessRequestUtil {
                         } ?: kotlin.run {
                             transaction.isRequestBodyPlainText = false
                         }
+                    } else if(orgBody is FormBody) {
+                        transaction.requestBody = orgBody.toString()
                     } else {
                         transaction.isRequestBodyPlainText = false
                     }
