@@ -24,32 +24,43 @@ import java.nio.charset.Charset
 /**
  * Proxies a buffered sink to another buffered sink, allowing to intercept its data
  */
-internal open class ProxyBufferedSink(val other: BufferedSink) : BufferedSink {
+internal abstract class ProxyBufferedSink(private val other: BufferedSink, val url: String = "") : BufferedSink {
 
+    private var debug = false
+    private var sentComplete = false
     var interceptedString: String? = null
 
     override val buffer: Buffer
-        get() = other.buffer
+        get() {
+            if (debug) Log.d("ProxyBufferedSink", "getBuffer :: $url")
+            return other.buffer.also { internalComplete() }
+        }
 
     override fun buffer(): Buffer {
-        return other.buffer()
+        if (debug) Log.d("ProxyBufferedSink", "buffer :: $url")
+        return other.buffer().also { internalComplete() }
     }
 
     override fun close() {
+        if (debug) Log.d("ProxyBufferedSink", "close :: $url")
         other.close()
-        complete()
+        internalComplete()
     }
 
     override fun emit(): BufferedSink {
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, emit :: $url")
         return other.emit()
     }
 
     override fun emitCompleteSegments(): BufferedSink {
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, emitCompleteSegments :: $url")
         return other.emitCompleteSegments()
     }
 
     override fun flush() {
+        if (debug) Log.d("ProxyBufferedSink", "flush :: $url")
         other.flush()
+        internalComplete()
     }
 
     override fun isOpen(): Boolean {
@@ -57,6 +68,7 @@ internal open class ProxyBufferedSink(val other: BufferedSink) : BufferedSink {
     }
 
     override fun outputStream(): OutputStream {
+        if (debug) Log.d("ProxyBufferedSink", "outputStream :: $url")
         return other.outputStream()
     }
 
@@ -65,119 +77,129 @@ internal open class ProxyBufferedSink(val other: BufferedSink) : BufferedSink {
     }
 
     override fun write(source: ByteArray): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, write byteArray")
-        return other.write(source).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, write byteArray :: $url")
+        return other.write(source).also { internalComplete() }
     }
 
     override fun write(source: ByteArray, offset: Int, byteCount: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, write byteArray offset byteCount")
-        return other.write(source, offset, byteCount).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, write byteArray offset byteCount :: $url")
+        return other.write(source, offset, byteCount).also { internalComplete() }
     }
 
     override fun write(byteString: ByteString): BufferedSink {
         interceptedString = byteString.utf8()
-        return other.write(byteString).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "write :: $url")
+        return other.write(byteString).also { internalComplete() }
     }
 
     override fun write(byteString: ByteString, offset: Int, byteCount: Int): BufferedSink {
         interceptedString = byteString.utf8()
-        Log.i("ProxyBufferedSink", "write split called multiple times?")
-        return other.write(byteString, offset, byteCount).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "write split called multiple times? :: $url")
+        return other.write(byteString, offset, byteCount).also { internalComplete() }
     }
 
     override fun write(source: Source, byteCount: Long): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, source byteCount")
-        return other.write(source, byteCount).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, source byteCount :: $url")
+        return other.write(source, byteCount).also { internalComplete() }
     }
 
     override fun write(source: Buffer, byteCount: Long) {
-        Log.i("ProxyBufferedSink", "Interception unsupported, source byteCount")
-        return other.write(source, byteCount).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, source byteCount :: $url")
+        return other.write(source, byteCount).also { internalComplete() }
     }
 
     override fun write(p0: ByteBuffer?): Int {
-        Log.i("ProxyBufferedSink", "Interception unsupported, byteBuffer")
-        return other.write(p0).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, byteBuffer :: $url")
+        return other.write(p0).also { internalComplete() }
     }
 
     override fun writeAll(source: Source): Long {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeAll source")
-        return other.writeAll(source).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeAll source :: $url")
+        return other.writeAll(source).also { internalComplete() }
     }
 
     override fun writeByte(b: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeByte int")
-        return other.writeByte(b).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeByte int :: $url")
+        return other.writeByte(b).also { internalComplete() }
     }
 
     override fun writeDecimalLong(v: Long): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeDecimalLong")
-        return other.writeDecimalLong(v).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeDecimalLong :: $url")
+        return other.writeDecimalLong(v).also { internalComplete() }
     }
 
     override fun writeHexadecimalUnsignedLong(v: Long): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeHexadecimalUnsignedLong")
-        return other.writeHexadecimalUnsignedLong(v).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeHexadecimalUnsignedLong :: $url")
+        return other.writeHexadecimalUnsignedLong(v).also { internalComplete() }
     }
 
     override fun writeInt(i: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeInt")
-        return other.writeInt(i).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeInt :: $url")
+        return other.writeInt(i).also { internalComplete() }
     }
 
     override fun writeIntLe(i: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeIntLe")
-        return other.writeIntLe(i).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeIntLe :: $url")
+        return other.writeIntLe(i).also { internalComplete() }
     }
 
     override fun writeLong(v: Long): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeLong")
-        return other.writeLong(v).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeLong :: $url")
+        return other.writeLong(v).also { internalComplete() }
     }
 
     override fun writeLongLe(v: Long): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeLongLe")
-        return other.writeLongLe(v).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeLongLe :: $url")
+        return other.writeLongLe(v).also { internalComplete() }
     }
 
     override fun writeShort(s: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeShort")
-        return other.writeShort(s).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeShort :: $url")
+        return other.writeShort(s).also { internalComplete() }
     }
 
     override fun writeShortLe(s: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, writeShortLe")
-        return other.writeShortLe(s).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, writeShortLe :: $url")
+        return other.writeShortLe(s).also { internalComplete() }
     }
 
     override fun writeString(string: String, charset: Charset): BufferedSink {
         interceptedString = string
-        return other.writeString(string, charset).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "writeString :: $url")
+        return other.writeString(string, charset).also { internalComplete() }
     }
 
     override fun writeString(string: String, beginIndex: Int, endIndex: Int, charset: Charset): BufferedSink {
         interceptedString = string
-        Log.i("ProxyBufferedSink", "writeString split called multiple times?")
-        return other.writeString(string, beginIndex, endIndex, charset).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "writeString split called multiple times? :: $url")
+        return other.writeString(string, beginIndex, endIndex, charset).also { internalComplete() }
     }
 
     override fun writeUtf8(string: String): BufferedSink {
         interceptedString = string
-        return other.writeUtf8(string).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "writeUtf8 :: $url")
+        return other.writeUtf8(string).also { internalComplete() }
     }
 
     override fun writeUtf8(string: String, beginIndex: Int, endIndex: Int): BufferedSink {
         interceptedString = string
-        Log.i("ProxyBufferedSink", "writeUtf8 split called multiple times?")
-        return other.writeUtf8(string, beginIndex, endIndex).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "writeUtf8 split called multiple times? :: $url")
+        return other.writeUtf8(string, beginIndex, endIndex).also { internalComplete() }
     }
 
     override fun writeUtf8CodePoint(codePoint: Int): BufferedSink {
-        Log.i("ProxyBufferedSink", "Interception unsupported, codePoint")
-        return other.writeUtf8CodePoint(codePoint).also { complete() }
+        if (debug) Log.d("ProxyBufferedSink", "Interception unsupported, codePoint :: $url")
+        return other.writeUtf8CodePoint(codePoint).also { internalComplete() }
     }
 
-    open fun complete() {
-        // todo
+    internal fun internalComplete() {
+        if (debug) Log.d("ProxyBufferedSink", "internalComplete :: $url")
+        if (sentComplete) {
+            return
+        }
+        sentComplete = true
+        complete()
     }
+
+    abstract fun complete()
 }

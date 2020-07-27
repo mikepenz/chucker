@@ -96,7 +96,7 @@ object ChuckerProcessRequestUtil {
                     return object : ProxyOutputStream(sink.outputStream(), ByteArrayOutputStream()) {
                         override fun close() {
                             super.close()
-                            complete()
+                            internalComplete()
                         }
                     }.also {
                         proxiedOutputStream = it
