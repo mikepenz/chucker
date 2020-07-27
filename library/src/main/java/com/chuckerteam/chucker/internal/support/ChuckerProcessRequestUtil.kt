@@ -131,8 +131,17 @@ object ChuckerProcessRequestUtil {
                         } ?: kotlin.run {
                             transaction.isRequestBodyPlainText = false
                         }
-                    } else if(orgBody is FormBody) {
-                        transaction.requestBody = orgBody.toString()
+                    } else if (orgBody is FormBody) {
+                        // special handling for formBody as it will be sent as buffer which we can't intercept
+                        val builder = StringBuilder()
+                        for (i in 0 until orgBody.size) {
+                            if (i > 0) builder.append('&')
+                            builder.append(orgBody.encodedName(i))
+                            builder.append('='.toInt())
+                            builder.append(orgBody.encodedValue(i))
+                            builder.appendln()
+                        }
+                        transaction.requestBody = builder.toString()
                     } else {
                         transaction.isRequestBodyPlainText = false
                     }
