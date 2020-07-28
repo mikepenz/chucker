@@ -31,7 +31,8 @@ class ChuckerInterceptor internal constructor(
         private val collector: ChuckerCollector = ChuckerCollector(context),
         private val maxContentLength: Long = 250000L,
         private val fileFactory: FileFactory,
-        private val superPoweredInterceptor: Boolean = true,
+        private val okHttpInterceptor: Boolean = true,
+        private val superPoweredInterceptor: Boolean = false,
         headersToRedact: Set<String> = emptySet()
 ) : Interceptor {
 
@@ -52,9 +53,10 @@ class ChuckerInterceptor internal constructor(
             context: Context,
             collector: ChuckerCollector = ChuckerCollector(context),
             maxContentLength: Long = 250000L,
-            superPoweredInterceptor: Boolean = true,
+            okHttpInterceptor: Boolean = true,
+            superPoweredInterceptor: Boolean = false,
             headersToRedact: Set<String> = emptySet()
-    ) : this(context, collector, maxContentLength, AndroidCacheFileFactory(context), superPoweredInterceptor, headersToRedact)
+    ) : this(context, collector, maxContentLength, AndroidCacheFileFactory(context), okHttpInterceptor, superPoweredInterceptor, headersToRedact)
 
     private val io: IOUtils = IOUtils(context)
     private val headersToRedact: MutableSet<String> = headersToRedact.toMutableSet()
@@ -70,12 +72,18 @@ class ChuckerInterceptor internal constructor(
         val response: Response
         val transaction = HttpTransaction()
 
-        val interceptedRequest = if (superPoweredInterceptor) {
-            ChuckerProcessRequestUtil.processRequest(collector, io, request, transaction)
-        } else {
-            processRequest(request, transaction)
-            collector.onRequestSent(transaction)
-            request
+        val interceptedRequest = when {
+            okHttpInterceptor -> {
+                ChuckerOkHttpProcessRequestUtil.processRequest(collector, io, request, transaction)
+            }
+            superPoweredInterceptor -> {
+                ChuckerProcessRequestUtil.processRequest(collector, io, request, transaction)
+            }
+            else -> {
+                processRequest(request, transaction)
+                collector.onRequestSent(transaction)
+                request
+            }
         }
 
         try {
