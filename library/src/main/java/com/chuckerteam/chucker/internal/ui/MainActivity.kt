@@ -11,9 +11,9 @@ import com.chuckerteam.chucker.internal.ui.transaction.TransactionAdapter
 import com.google.android.material.tabs.TabLayout
 
 internal class MainActivity :
-    BaseChuckerActivity(),
-    TransactionAdapter.TransactionClickListListener,
-    ThrowableAdapter.ThrowableClickListListener {
+        BaseChuckerActivity(),
+        TransactionAdapter.TransactionClickListListener,
+        ThrowableAdapter.ThrowableClickListListener {
 
     private lateinit var mainBinding: ChuckerActivityMainBinding
 
@@ -31,16 +31,16 @@ internal class MainActivity :
             viewPager.adapter = HomePageAdapter(this@MainActivity, supportFragmentManager)
             tabLayout.setupWithViewPager(viewPager)
             viewPager.addOnPageChangeListener(
-                object : TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        if (position == HomePageAdapter.SCREEN_HTTP_INDEX) {
-                            Chucker.dismissTransactionsNotification(this@MainActivity)
-                        } else {
-                            Chucker.dismissErrorsNotification(this@MainActivity)
+                    object : TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
+                        override fun onPageSelected(position: Int) {
+                            super.onPageSelected(position)
+                            if (position == HomePageAdapter.SCREEN_HTTP_INDEX) {
+                                Chucker.dismissTransactionsNotification(this@MainActivity)
+                            } else {
+                                Chucker.dismissErrorsNotification(this@MainActivity)
+                            }
                         }
                     }
-                }
             )
         }
 

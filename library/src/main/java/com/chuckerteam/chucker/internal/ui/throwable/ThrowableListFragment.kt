@@ -2,12 +2,7 @@ package com.chuckerteam.chucker.internal.ui.throwable
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -49,15 +44,15 @@ internal class ThrowableListFragment : Fragment(), ThrowableAdapter.ThrowableCli
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.throwables.observe(
-            viewLifecycleOwner,
-            Observer { throwables ->
-                errorsAdapter.setData(throwables)
-                errorsBinding.tutorialView.visibility = if (throwables.isNullOrEmpty()) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
+                viewLifecycleOwner,
+                Observer { throwables ->
+                    errorsAdapter.setData(throwables)
+                    errorsBinding.tutorialView.visibility = if (throwables.isNullOrEmpty()) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
                 }
-            }
         )
     }
 
@@ -77,17 +72,17 @@ internal class ThrowableListFragment : Fragment(), ThrowableAdapter.ThrowableCli
 
     private fun askForConfirmation() {
         val confirmationDialogData = DialogData(
-            title = getString(R.string.chucker_clear),
-            message = getString(R.string.chucker_clear_throwable_confirmation),
-            postiveButtonText = getString(R.string.chucker_clear),
-            negativeButtonText = getString(R.string.chucker_cancel)
+                title = getString(R.string.chucker_clear),
+                message = getString(R.string.chucker_clear_throwable_confirmation),
+                postiveButtonText = getString(R.string.chucker_clear),
+                negativeButtonText = getString(R.string.chucker_cancel)
         )
         requireContext().showDialog(
-            confirmationDialogData,
-            onPositiveClick = {
-                viewModel.clearThrowables()
-            },
-            onNegativeClick = null
+                confirmationDialogData,
+                onPositiveClick = {
+                    viewModel.clearThrowables()
+                },
+                onNegativeClick = null
         )
     }
 

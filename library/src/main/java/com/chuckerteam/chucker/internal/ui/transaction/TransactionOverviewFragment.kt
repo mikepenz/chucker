@@ -1,11 +1,7 @@
 package com.chuckerteam.chucker.internal.ui.transaction
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -26,9 +22,9 @@ internal class TransactionOverviewFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         overviewBinding = ChuckerFragmentTransactionOverviewBinding.inflate(inflater, container, false)
         return overviewBinding.root
@@ -37,8 +33,8 @@ internal class TransactionOverviewFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.findItem(R.id.save_body).isVisible = false
         viewModel.doesUrlRequireEncoding.observe(
-            viewLifecycleOwner,
-            Observer { menu.findItem(R.id.encode_url).isVisible = it }
+                viewLifecycleOwner,
+                Observer { menu.findItem(R.id.encode_url).isVisible = it }
         )
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -48,13 +44,13 @@ internal class TransactionOverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.transaction
-            .combineLatest(viewModel.encodeUrl)
-            .observe(
-                viewLifecycleOwner,
-                Observer { (transaction, encodeUrl) ->
-                    populateUI(transaction, encodeUrl)
-                }
-            )
+                .combineLatest(viewModel.encodeUrl)
+                .observe(
+                        viewLifecycleOwner,
+                        Observer { (transaction, encodeUrl) ->
+                            populateUI(transaction, encodeUrl)
+                        }
+                )
     }
 
     private fun populateUI(transaction: HttpTransaction?, encodeUrl: Boolean) {

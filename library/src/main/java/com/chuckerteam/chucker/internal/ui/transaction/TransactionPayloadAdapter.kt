@@ -64,34 +64,34 @@ internal class TransactionBodyAdapter : RecyclerView.Adapter<TransactionPayloadV
 
     internal fun highlightQueryWithColors(newText: String, backgroundColor: Int, foregroundColor: Int) {
         items.filterIsInstance<TransactionPayloadItem.BodyLineItem>()
-            .withIndex()
-            .forEach { (index, item) ->
-                if (item.line.contains(newText, ignoreCase = true)) {
-                    item.line.clearSpans()
-                    item.line = item.line.toString()
-                        .highlightWithDefinedColors(newText, backgroundColor, foregroundColor)
-                    notifyItemChanged(index + 1)
-                } else {
-                    // Let's clear the spans if we haven't found the query string.
+                .withIndex()
+                .forEach { (index, item) ->
+                    if (item.line.contains(newText, ignoreCase = true)) {
+                        item.line.clearSpans()
+                        item.line = item.line.toString()
+                                .highlightWithDefinedColors(newText, backgroundColor, foregroundColor)
+                        notifyItemChanged(index + 1)
+                    } else {
+                        // Let's clear the spans if we haven't found the query string.
+                        val spans = item.line.getSpans(0, item.line.length - 1, Any::class.java)
+                        if (spans.isNotEmpty()) {
+                            item.line.clearSpans()
+                            notifyItemChanged(index + 1)
+                        }
+                    }
+                }
+    }
+
+    internal fun resetHighlight() {
+        items.filterIsInstance<TransactionPayloadItem.BodyLineItem>()
+                .withIndex()
+                .forEach { (index, item) ->
                     val spans = item.line.getSpans(0, item.line.length - 1, Any::class.java)
                     if (spans.isNotEmpty()) {
                         item.line.clearSpans()
                         notifyItemChanged(index + 1)
                     }
                 }
-            }
-    }
-
-    internal fun resetHighlight() {
-        items.filterIsInstance<TransactionPayloadItem.BodyLineItem>()
-            .withIndex()
-            .forEach { (index, item) ->
-                val spans = item.line.getSpans(0, item.line.length - 1, Any::class.java)
-                if (spans.isNotEmpty()) {
-                    item.line.clearSpans()
-                    notifyItemChanged(index + 1)
-                }
-            }
     }
 
     companion object {
@@ -105,7 +105,7 @@ internal sealed class TransactionPayloadViewHolder(view: View) : RecyclerView.Vi
     abstract fun bind(item: TransactionPayloadItem)
 
     internal class HeaderViewHolder(
-        private val headerBinding: ChuckerTransactionItemHeadersBinding
+            private val headerBinding: ChuckerTransactionItemHeadersBinding
     ) : TransactionPayloadViewHolder(headerBinding.root) {
         override fun bind(item: TransactionPayloadItem) {
             if (item is TransactionPayloadItem.HeaderItem) {
@@ -115,7 +115,7 @@ internal sealed class TransactionPayloadViewHolder(view: View) : RecyclerView.Vi
     }
 
     internal class BodyLineViewHolder(
-        private val bodyBinding: ChuckerTransactionItemBodyLineBinding
+            private val bodyBinding: ChuckerTransactionItemBodyLineBinding
     ) : TransactionPayloadViewHolder(bodyBinding.root) {
         override fun bind(item: TransactionPayloadItem) {
             if (item is TransactionPayloadItem.BodyLineItem) {
@@ -125,7 +125,7 @@ internal sealed class TransactionPayloadViewHolder(view: View) : RecyclerView.Vi
     }
 
     internal class ImageViewHolder(
-        private val imageBinding: ChuckerTransactionItemImageBinding
+            private val imageBinding: ChuckerTransactionItemImageBinding
     ) : TransactionPayloadViewHolder(imageBinding.root) {
 
         override fun bind(item: TransactionPayloadItem) {
@@ -140,17 +140,17 @@ internal sealed class TransactionPayloadViewHolder(view: View) : RecyclerView.Vi
 
             return if (luminance < LUMINANCE_THRESHOLD) {
                 ChessboardDrawable.createPattern(
-                    itemView.context,
-                    R.color.chucker_chessboard_even_square_light,
-                    R.color.chucker_chessboard_odd_square_light,
-                    R.dimen.chucker_half_grid
+                        itemView.context,
+                        R.color.chucker_chessboard_even_square_light,
+                        R.color.chucker_chessboard_odd_square_light,
+                        R.dimen.chucker_half_grid
                 )
             } else {
                 ChessboardDrawable.createPattern(
-                    itemView.context,
-                    R.color.chucker_chessboard_even_square_dark,
-                    R.color.chucker_chessboard_odd_square_dark,
-                    R.dimen.chucker_half_grid
+                        itemView.context,
+                        R.color.chucker_chessboard_even_square_dark,
+                        R.color.chucker_chessboard_odd_square_dark,
+                        R.dimen.chucker_half_grid
                 )
             }
         }

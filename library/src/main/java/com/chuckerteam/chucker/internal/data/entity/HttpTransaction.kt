@@ -14,7 +14,10 @@ import com.chuckerteam.chucker.internal.support.JsonConverter
 import com.google.gson.reflect.TypeToken
 import okhttp3.Headers
 import okhttp3.HttpUrl
-import java.util.Date
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.contentEquals
 
 /**
  * Represent a full HTTP transaction (with Request and Response). Instances of this classes
@@ -23,60 +26,60 @@ import java.util.Date
 @Suppress("LongParameterList")
 @Entity(tableName = "transactions")
 internal class HttpTransaction(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
-    var id: Long = 0,
-    @ColumnInfo(name = "requestDate") var requestDate: Long?,
-    @ColumnInfo(name = "responseDate") var responseDate: Long?,
-    @ColumnInfo(name = "tookMs") var tookMs: Long?,
-    @ColumnInfo(name = "protocol") var protocol: String?,
-    @ColumnInfo(name = "method") var method: String?,
-    @ColumnInfo(name = "url") var url: String?,
-    @ColumnInfo(name = "host") var host: String?,
-    @ColumnInfo(name = "path") var path: String?,
-    @ColumnInfo(name = "scheme") var scheme: String?,
-    @ColumnInfo(name = "responseTlsVersion") var responseTlsVersion: String?,
-    @ColumnInfo(name = "responseCipherSuite") var responseCipherSuite: String?,
-    @ColumnInfo(name = "requestPayloadSize") var requestPayloadSize: Long?,
-    @ColumnInfo(name = "requestContentType") var requestContentType: String?,
-    @ColumnInfo(name = "requestHeaders") var requestHeaders: String?,
-    @ColumnInfo(name = "requestBody") var requestBody: String?,
-    @ColumnInfo(name = "isRequestBodyPlainText") var isRequestBodyPlainText: Boolean = true,
-    @ColumnInfo(name = "responseCode") var responseCode: Int?,
-    @ColumnInfo(name = "responseMessage") var responseMessage: String?,
-    @ColumnInfo(name = "error") var error: String?,
-    @ColumnInfo(name = "responsePayloadSize") var responsePayloadSize: Long?,
-    @ColumnInfo(name = "responseContentType") var responseContentType: String?,
-    @ColumnInfo(name = "responseHeaders") var responseHeaders: String?,
-    @ColumnInfo(name = "responseBody") var responseBody: String?,
-    @ColumnInfo(name = "isResponseBodyPlainText") var isResponseBodyPlainText: Boolean = true,
-    @ColumnInfo(name = "responseImageData") var responseImageData: ByteArray?
+        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id")
+        var id: Long = 0,
+        @ColumnInfo(name = "requestDate") var requestDate: Long?,
+        @ColumnInfo(name = "responseDate") var responseDate: Long?,
+        @ColumnInfo(name = "tookMs") var tookMs: Long?,
+        @ColumnInfo(name = "protocol") var protocol: String?,
+        @ColumnInfo(name = "method") var method: String?,
+        @ColumnInfo(name = "url") var url: String?,
+        @ColumnInfo(name = "host") var host: String?,
+        @ColumnInfo(name = "path") var path: String?,
+        @ColumnInfo(name = "scheme") var scheme: String?,
+        @ColumnInfo(name = "responseTlsVersion") var responseTlsVersion: String?,
+        @ColumnInfo(name = "responseCipherSuite") var responseCipherSuite: String?,
+        @ColumnInfo(name = "requestPayloadSize") var requestPayloadSize: Long?,
+        @ColumnInfo(name = "requestContentType") var requestContentType: String?,
+        @ColumnInfo(name = "requestHeaders") var requestHeaders: String?,
+        @ColumnInfo(name = "requestBody") var requestBody: String?,
+        @ColumnInfo(name = "isRequestBodyPlainText") var isRequestBodyPlainText: Boolean = true,
+        @ColumnInfo(name = "responseCode") var responseCode: Int?,
+        @ColumnInfo(name = "responseMessage") var responseMessage: String?,
+        @ColumnInfo(name = "error") var error: String?,
+        @ColumnInfo(name = "responsePayloadSize") var responsePayloadSize: Long?,
+        @ColumnInfo(name = "responseContentType") var responseContentType: String?,
+        @ColumnInfo(name = "responseHeaders") var responseHeaders: String?,
+        @ColumnInfo(name = "responseBody") var responseBody: String?,
+        @ColumnInfo(name = "isResponseBodyPlainText") var isResponseBodyPlainText: Boolean = true,
+        @ColumnInfo(name = "responseImageData") var responseImageData: ByteArray?
 ) {
 
     @Ignore
     constructor() : this(
-        requestDate = null,
-        responseDate = null,
-        tookMs = null,
-        protocol = null,
-        method = null,
-        url = null,
-        host = null,
-        path = null,
-        scheme = null,
-        responseTlsVersion = null,
-        responseCipherSuite = null,
-        requestPayloadSize = null,
-        requestContentType = null,
-        requestHeaders = null,
-        requestBody = null,
-        responseCode = null,
-        responseMessage = null,
-        error = null,
-        responsePayloadSize = null,
-        responseContentType = null,
-        responseHeaders = null,
-        responseBody = null,
-        responseImageData = null
+            requestDate = null,
+            responseDate = null,
+            tookMs = null,
+            protocol = null,
+            method = null,
+            url = null,
+            host = null,
+            path = null,
+            scheme = null,
+            responseTlsVersion = null,
+            responseCipherSuite = null,
+            requestPayloadSize = null,
+            requestContentType = null,
+            requestHeaders = null,
+            requestBody = null,
+            responseCode = null,
+            responseMessage = null,
+            error = null,
+            responsePayloadSize = null,
+            responseContentType = null,
+            responseHeaders = null,
+            responseBody = null,
+            responseImageData = null
     )
 
     enum class Status {
@@ -152,17 +155,17 @@ internal class HttpTransaction(
 
     fun getParsedRequestHeaders(): List<HttpHeader>? {
         return JsonConverter.instance.fromJson<List<HttpHeader>>(
-            requestHeaders,
-            object : TypeToken<List<HttpHeader>>() {
-            }.type
+                requestHeaders,
+                object : TypeToken<List<HttpHeader>>() {
+                }.type
         )
     }
 
     fun getParsedResponseHeaders(): List<HttpHeader>? {
         return JsonConverter.instance.fromJson<List<HttpHeader>>(
-            responseHeaders,
-            object : TypeToken<List<HttpHeader>>() {
-            }.type
+                responseHeaders,
+                object : TypeToken<List<HttpHeader>>() {
+                }.type
         )
     }
 
@@ -240,30 +243,30 @@ internal class HttpTransaction(
         if (other == null) return false
 
         return (id == other.id) &&
-            (requestDate == other.requestDate) &&
-            (responseDate == other.responseDate) &&
-            (tookMs == other.tookMs) &&
-            (protocol == other.protocol) &&
-            (method == other.method) &&
-            (url == other.url) &&
-            (host == other.host) &&
-            (path == other.path) &&
-            (scheme == other.scheme) &&
-            (responseTlsVersion == other.responseTlsVersion) &&
-            (responseCipherSuite == other.responseCipherSuite) &&
-            (requestPayloadSize == other.requestPayloadSize) &&
-            (requestContentType == other.requestContentType) &&
-            (requestHeaders == other.requestHeaders) &&
-            (requestBody == other.requestBody) &&
-            (isRequestBodyPlainText == other.isRequestBodyPlainText) &&
-            (responseCode == other.responseCode) &&
-            (responseMessage == other.responseMessage) &&
-            (error == other.error) &&
-            (responsePayloadSize == other.responsePayloadSize) &&
-            (responseContentType == other.responseContentType) &&
-            (responseHeaders == other.responseHeaders) &&
-            (responseBody == other.responseBody) &&
-            (isResponseBodyPlainText == other.isResponseBodyPlainText) &&
-            (responseImageData?.contentEquals(other.responseImageData ?: byteArrayOf()) != false)
+                (requestDate == other.requestDate) &&
+                (responseDate == other.responseDate) &&
+                (tookMs == other.tookMs) &&
+                (protocol == other.protocol) &&
+                (method == other.method) &&
+                (url == other.url) &&
+                (host == other.host) &&
+                (path == other.path) &&
+                (scheme == other.scheme) &&
+                (responseTlsVersion == other.responseTlsVersion) &&
+                (responseCipherSuite == other.responseCipherSuite) &&
+                (requestPayloadSize == other.requestPayloadSize) &&
+                (requestContentType == other.requestContentType) &&
+                (requestHeaders == other.requestHeaders) &&
+                (requestBody == other.requestBody) &&
+                (isRequestBodyPlainText == other.isRequestBodyPlainText) &&
+                (responseCode == other.responseCode) &&
+                (responseMessage == other.responseMessage) &&
+                (error == other.error) &&
+                (responsePayloadSize == other.responsePayloadSize) &&
+                (responseContentType == other.responseContentType) &&
+                (responseHeaders == other.responseHeaders) &&
+                (responseBody == other.responseBody) &&
+                (isResponseBodyPlainText == other.isResponseBodyPlainText) &&
+                (responseImageData?.contentEquals(other.responseImageData ?: byteArrayOf()) != false)
     }
 }

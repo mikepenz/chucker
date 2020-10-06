@@ -7,8 +7,8 @@ import okio.Buffer
 import okio.Source
 
 internal class TransactionDetailsSharable(
-    private val transaction: HttpTransaction,
-    private val encodeUrls: Boolean,
+        private val transaction: HttpTransaction,
+        private val encodeUrls: Boolean,
 ) : Sharable {
     override fun toSharableContent(context: Context): Source = Buffer().apply {
         writeUtf8("${context.getString(R.string.chucker_url)}: ${transaction.getFormattedUrl(encodeUrls)}\n")
@@ -37,15 +37,15 @@ internal class TransactionDetailsSharable(
         }
 
         writeUtf8(
-            if (transaction.isRequestBodyPlainText) {
-                if (transaction.requestBody.isNullOrBlank()) {
-                    context.getString(R.string.chucker_body_empty)
+                if (transaction.isRequestBodyPlainText) {
+                    if (transaction.requestBody.isNullOrBlank()) {
+                        context.getString(R.string.chucker_body_empty)
+                    } else {
+                        transaction.getFormattedRequestBody()
+                    }
                 } else {
-                    transaction.getFormattedRequestBody()
+                    context.getString(R.string.chucker_body_omitted)
                 }
-            } else {
-                context.getString(R.string.chucker_body_omitted)
-            }
         )
 
         writeUtf8("\n\n")
@@ -59,15 +59,15 @@ internal class TransactionDetailsSharable(
         }
 
         writeUtf8(
-            if (transaction.isResponseBodyPlainText) {
-                if (transaction.responseBody.isNullOrBlank()) {
-                    context.getString(R.string.chucker_body_empty)
+                if (transaction.isResponseBodyPlainText) {
+                    if (transaction.responseBody.isNullOrBlank()) {
+                        context.getString(R.string.chucker_body_empty)
+                    } else {
+                        transaction.getFormattedResponseBody()
+                    }
                 } else {
-                    transaction.getFormattedResponseBody()
+                    context.getString(R.string.chucker_body_omitted)
                 }
-            } else {
-                context.getString(R.string.chucker_body_omitted)
-            }
         )
     }
 }

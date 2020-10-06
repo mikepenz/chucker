@@ -36,10 +36,10 @@ internal class ThrowableActivity : BaseChuckerActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel.throwable.observe(
-            this,
-            Observer {
-                populateUI(it)
-            }
+                this,
+                Observer {
+                    populateUI(it)
+                }
         )
     }
 
@@ -60,20 +60,20 @@ internal class ThrowableActivity : BaseChuckerActivity() {
 
     private fun share(throwable: RecordedThrowable) {
         val throwableDetailsText = getString(
-            R.string.chucker_share_throwable_content,
-            throwable.formattedDate,
-            throwable.clazz,
-            throwable.tag,
-            throwable.message,
-            throwable.content
+                R.string.chucker_share_throwable_content,
+                throwable.formattedDate,
+                throwable.clazz,
+                throwable.tag,
+                throwable.message,
+                throwable.content
         )
         startActivity(
-            ShareCompat.IntentBuilder.from(this)
-                .setType(MIME_TYPE)
-                .setChooserTitle(getString(R.string.chucker_share_throwable_title))
-                .setSubject(getString(R.string.chucker_share_throwable_subject))
-                .setText(throwableDetailsText)
-                .createChooserIntent()
+                ShareCompat.IntentBuilder.from(this)
+                        .setType(MIME_TYPE)
+                        .setChooserTitle(getString(R.string.chucker_share_throwable_title))
+                        .setSubject(getString(R.string.chucker_share_throwable_subject))
+                        .setText(throwableDetailsText)
+                        .createChooserIntent()
         )
     }
 
@@ -90,7 +90,7 @@ internal class ThrowableActivity : BaseChuckerActivity() {
     private val RecordedThrowable.formattedDate: String
         get() {
             return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM)
-                .format(this.date)
+                    .format(this.date)
         }
 
     companion object {

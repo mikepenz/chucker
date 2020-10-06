@@ -9,7 +9,7 @@ import com.chuckerteam.chucker.internal.data.entity.RecordedThrowableTuple
 import java.text.DateFormat
 
 internal class ThrowableAdapter(
-    val listener: ThrowableClickListListener
+        val listener: ThrowableClickListListener
 ) : RecyclerView.Adapter<ThrowableAdapter.ThrowableViewHolder>() {
 
     private var data: List<RecordedThrowableTuple> = listOf()
@@ -34,7 +34,7 @@ internal class ThrowableAdapter(
     }
 
     inner class ThrowableViewHolder(
-        private val itemBinding: ChuckerListItemThrowableBinding
+            private val itemBinding: ChuckerListItemThrowableBinding
     ) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         private var throwableId: Long? = null
@@ -50,7 +50,7 @@ internal class ThrowableAdapter(
             clazz.text = throwable.clazz
             message.text = throwable.message
             date.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM)
-                .format(throwable.date)
+                    .format(throwable.date)
         }
 
         override fun onClick(v: View) {

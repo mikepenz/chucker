@@ -22,8 +22,8 @@ internal abstract class ChuckerDatabase : RoomDatabase() {
             applicationContext.getDatabasePath(OLD_DB_NAME).delete()
 
             return Room.databaseBuilder(applicationContext, ChuckerDatabase::class.java, DB_NAME)
-                .fallbackToDestructiveMigration()
-                .build()
+                    .fallbackToDestructiveMigration()
+                    .build()
         }
     }
 }

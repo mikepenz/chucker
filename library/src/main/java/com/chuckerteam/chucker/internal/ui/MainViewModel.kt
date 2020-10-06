@@ -1,11 +1,7 @@
 package com.chuckerteam.chucker.internal.ui
 
 import android.text.TextUtils
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
 import com.chuckerteam.chucker.internal.data.entity.HttpTransactionTuple
 import com.chuckerteam.chucker.internal.data.entity.RecordedThrowableTuple
@@ -34,7 +30,7 @@ internal class MainViewModel : ViewModel() {
     }
 
     val throwables: LiveData<List<RecordedThrowableTuple>> = RepositoryProvider.throwable()
-        .getSortedThrowablesTuples()
+            .getSortedThrowablesTuples()
 
     suspend fun getAllTransactions(): List<HttpTransaction>? = RepositoryProvider.transaction().getAllTransactions()
 

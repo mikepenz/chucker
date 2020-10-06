@@ -6,14 +6,10 @@ import com.google.gson.JsonParser
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import org.xml.sax.SAXParseException
-import java.io.ByteArrayInputStream
-import java.io.IOException
-import java.io.PrintWriter
-import java.io.StringWriter
-import java.io.UnsupportedEncodingException
+import java.io.*
 import java.net.URLDecoder
 import java.nio.charset.Charset
-import java.util.Locale
+import java.util.*
 import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory

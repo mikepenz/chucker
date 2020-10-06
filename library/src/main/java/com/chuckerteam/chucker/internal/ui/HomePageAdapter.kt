@@ -10,7 +10,7 @@ import com.chuckerteam.chucker.internal.ui.transaction.TransactionListFragment
 import java.lang.ref.WeakReference
 
 internal class HomePageAdapter(context: Context, fragmentManager: FragmentManager) :
-    FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val context: WeakReference<Context> = WeakReference(context)
 
     override fun getItem(position: Int): Fragment = if (position == SCREEN_HTTP_INDEX) {
@@ -22,13 +22,13 @@ internal class HomePageAdapter(context: Context, fragmentManager: FragmentManage
     override fun getCount(): Int = 2
 
     override fun getPageTitle(position: Int): CharSequence? =
-        context.get()?.getString(
-            if (position == SCREEN_HTTP_INDEX) {
-                R.string.chucker_tab_network
-            } else {
-                R.string.chucker_tab_errors
-            }
-        )
+            context.get()?.getString(
+                    if (position == SCREEN_HTTP_INDEX) {
+                        R.string.chucker_tab_network
+                    } else {
+                        R.string.chucker_tab_errors
+                    }
+            )
 
     companion object {
         const val SCREEN_HTTP_INDEX = 0

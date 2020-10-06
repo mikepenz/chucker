@@ -14,6 +14,7 @@ public object Chucker {
 
     @Deprecated("This variable will be removed in 4.x release")
     public const val SCREEN_HTTP: Int = 1
+
     @Deprecated("This variable will be removed in 4.x release")
     public const val SCREEN_ERROR: Int = 2
 
@@ -31,9 +32,9 @@ public object Chucker {
      * @return An Intent for the main Chucker Activity that can be started with [Context.startActivity].
      */
     @Deprecated(
-        "This fun will be removed in 4.x release",
-        ReplaceWith("Chucker.getLaunchIntent(context)"),
-        DeprecationLevel.WARNING
+            "This fun will be removed in 4.x release",
+            ReplaceWith("Chucker.getLaunchIntent(context)"),
+            DeprecationLevel.WARNING
     )
     @JvmStatic
     public fun getLaunchIntent(context: Context, @Screen screen: Int): Intent {
@@ -48,7 +49,7 @@ public object Chucker {
     @JvmStatic
     public fun getLaunchIntent(context: Context): Intent {
         return Intent(context, MainActivity::class.java)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
     /**
@@ -58,9 +59,9 @@ public object Chucker {
      * @param collector the ChuckerCollector
      */
     @Deprecated(
-        "This fun will be removed in 4.x release",
-        ReplaceWith(""),
-        DeprecationLevel.WARNING
+            "This fun will be removed in 4.x release",
+            ReplaceWith(""),
+            DeprecationLevel.WARNING
     )
     @JvmStatic
     public fun registerDefaultCrashHandler(collector: ChuckerCollector) {
@@ -71,9 +72,9 @@ public object Chucker {
      * Method to dismiss the Chucker notification of HTTP Transactions
      */
     @Deprecated(
-        "This fun will be removed in 4.x release",
-        ReplaceWith("Chucker.dismissNotifications(context)"),
-        DeprecationLevel.WARNING
+            "This fun will be removed in 4.x release",
+            ReplaceWith("Chucker.dismissNotifications(context)"),
+            DeprecationLevel.WARNING
     )
     @JvmStatic
     public fun dismissTransactionsNotification(context: Context) {
@@ -84,9 +85,9 @@ public object Chucker {
      * Method to dismiss the Chucker notification of Uncaught Errors.
      */
     @Deprecated(
-        "This fun will be removed in 4.x release",
-        ReplaceWith("Chucker.dismissNotifications(context)"),
-        DeprecationLevel.WARNING
+            "This fun will be removed in 4.x release",
+            ReplaceWith("Chucker.dismissNotifications(context)"),
+            DeprecationLevel.WARNING
     )
     @JvmStatic
     public fun dismissErrorsNotification(context: Context) {

@@ -2,12 +2,7 @@ package com.chuckerteam.chucker.internal.ui.transaction
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -25,9 +20,9 @@ import com.chuckerteam.chucker.internal.ui.MainViewModel
 import kotlinx.coroutines.launch
 
 internal class TransactionListFragment :
-    Fragment(),
-    SearchView.OnQueryTextListener,
-    TransactionAdapter.TransactionClickListListener {
+        Fragment(),
+        SearchView.OnQueryTextListener,
+        TransactionAdapter.TransactionClickListListener {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -40,9 +35,9 @@ internal class TransactionListFragment :
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?,
     ): View? {
         transactionsBinding = ChuckerFragmentTransactionListBinding.inflate(inflater, container, false)
 
@@ -62,12 +57,12 @@ internal class TransactionListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.transactions.observe(
-            viewLifecycleOwner,
-            Observer { transactionTuples ->
-                transactionsAdapter.setData(transactionTuples)
-                transactionsBinding.tutorialView.visibility =
-                    if (transactionTuples.isEmpty()) View.VISIBLE else View.GONE
-            }
+                viewLifecycleOwner,
+                Observer { transactionTuples ->
+                    transactionsAdapter.setData(transactionTuples)
+                    transactionsBinding.tutorialView.visibility =
+                            if (transactionTuples.isEmpty()) View.VISIBLE else View.GONE
+                }
         )
     }
 
@@ -88,21 +83,21 @@ internal class TransactionListFragment :
         return when (item.itemId) {
             R.id.clear -> {
                 requireContext().showDialog(
-                    getClearDialogData(),
-                    onPositiveClick = {
-                        viewModel.clearTransactions()
-                    },
-                    onNegativeClick = null
+                        getClearDialogData(),
+                        onPositiveClick = {
+                            viewModel.clearTransactions()
+                        },
+                        onNegativeClick = null
                 )
                 true
             }
             R.id.export -> {
                 requireContext().showDialog(
-                    getExportDialogData(),
-                    onPositiveClick = {
-                        exportTransactions()
-                    },
-                    onNegativeClick = null
+                        getExportDialogData(),
+                        onPositiveClick = {
+                            exportTransactions()
+                        },
+                        onNegativeClick = null
                 )
                 true
             }
@@ -132,11 +127,11 @@ internal class TransactionListFragment :
 
         val sharableTransactions = TransactionListDetailsSharable(transactions, encodeUrls = false)
         val shareIntent = sharableTransactions.shareAsFile(
-            activity = requireActivity(),
-            fileName = EXPORT_FILE_NAME,
-            intentTitle = getString(R.string.chucker_share_all_transactions_title),
-            intentSubject = getString(R.string.chucker_share_all_transactions_subject),
-            clipDataLabel = "transactions"
+                activity = requireActivity(),
+                fileName = EXPORT_FILE_NAME,
+                intentTitle = getString(R.string.chucker_share_all_transactions_title),
+                intentSubject = getString(R.string.chucker_share_all_transactions_subject),
+                clipDataLabel = "transactions"
         )
         if (shareIntent != null) {
             startActivity(shareIntent)
@@ -144,17 +139,17 @@ internal class TransactionListFragment :
     }
 
     private fun getClearDialogData(): DialogData = DialogData(
-        title = getString(R.string.chucker_clear),
-        message = getString(R.string.chucker_clear_http_confirmation),
-        postiveButtonText = getString(R.string.chucker_clear),
-        negativeButtonText = getString(R.string.chucker_cancel)
+            title = getString(R.string.chucker_clear),
+            message = getString(R.string.chucker_clear_http_confirmation),
+            postiveButtonText = getString(R.string.chucker_clear),
+            negativeButtonText = getString(R.string.chucker_cancel)
     )
 
     private fun getExportDialogData(): DialogData = DialogData(
-        title = getString(R.string.chucker_export),
-        message = getString(R.string.chucker_export_http_confirmation),
-        postiveButtonText = getString(R.string.chucker_export),
-        negativeButtonText = getString(R.string.chucker_cancel)
+            title = getString(R.string.chucker_export),
+            message = getString(R.string.chucker_export_http_confirmation),
+            postiveButtonText = getString(R.string.chucker_export),
+            negativeButtonText = getString(R.string.chucker_cancel)
     )
 
     companion object {

@@ -1,15 +1,9 @@
 package com.chuckerteam.chucker.internal.support
 
 import android.content.Context
-import android.graphics.Bitmap
+import android.graphics.*
 import android.graphics.Bitmap.Config.ARGB_8888
-import android.graphics.BitmapShader
-import android.graphics.Canvas
-import android.graphics.ColorFilter
-import android.graphics.Paint
 import android.graphics.Paint.Style.FILL
-import android.graphics.PixelFormat
-import android.graphics.Rect
 import android.graphics.Shader.TileMode.REPEAT
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
@@ -19,9 +13,9 @@ import androidx.annotation.Px
 import androidx.core.content.ContextCompat
 
 internal class ChessboardDrawable(
-    @ColorInt evenColor: Int,
-    @ColorInt oddColor: Int,
-    @Px squareSize: Int
+        @ColorInt evenColor: Int,
+        @ColorInt oddColor: Int,
+        @Px squareSize: Int
 ) : Drawable() {
     private val chessboardPaint = Paint().apply {
         val patternBitmap = Bitmap.createBitmap(squareSize * 2, squareSize * 2, ARGB_8888)
@@ -61,10 +55,10 @@ internal class ChessboardDrawable(
 
     companion object {
         fun createPattern(
-            context: Context,
-            @ColorRes evenColorId: Int,
-            @ColorRes oddColorId: Int,
-            @DimenRes sizeId: Int
+                context: Context,
+                @ColorRes evenColorId: Int,
+                @ColorRes oddColorId: Int,
+                @DimenRes sizeId: Int
         ): ChessboardDrawable {
             val evenColor = ContextCompat.getColor(context, evenColorId)
             val oddColor = ContextCompat.getColor(context, oddColorId)

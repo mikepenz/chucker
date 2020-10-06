@@ -18,8 +18,8 @@ import java.text.DateFormat
 import javax.net.ssl.HttpsURLConnection
 
 internal class TransactionAdapter internal constructor(
-    context: Context,
-    private val listener: TransactionClickListListener?
+        context: Context,
+        private val listener: TransactionClickListListener?
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
     private var transactions: List<HttpTransactionTuple> = arrayListOf()
 
@@ -38,7 +38,7 @@ internal class TransactionAdapter internal constructor(
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) =
-        holder.bind(transactions[position])
+            holder.bind(transactions[position])
 
     fun setData(httpTransactions: List<HttpTransactionTuple>) {
         this.transactions = httpTransactions
@@ -46,7 +46,7 @@ internal class TransactionAdapter internal constructor(
     }
 
     inner class TransactionViewHolder(
-        private val itemBinding: ChuckerListItemTransactionBinding
+            private val itemBinding: ChuckerListItemTransactionBinding
     ) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         private var transactionId: Long? = null
@@ -92,8 +92,8 @@ internal class TransactionAdapter internal constructor(
         private fun setProtocolImage(resources: ProtocolResources) {
             itemBinding.ssl.setImageDrawable(AppCompatResources.getDrawable(itemView.context, resources.icon))
             ImageViewCompat.setImageTintList(
-                itemBinding.ssl,
-                ColorStateList.valueOf(ContextCompat.getColor(itemView.context, resources.color))
+                    itemBinding.ssl,
+                    ColorStateList.valueOf(ContextCompat.getColor(itemView.context, resources.color))
             )
         }
 

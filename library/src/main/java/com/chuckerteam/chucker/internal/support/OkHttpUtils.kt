@@ -3,9 +3,7 @@ package com.chuckerteam.chucker.internal.support
 import okhttp3.Headers
 import okhttp3.Request
 import okhttp3.Response
-import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
-import java.net.HttpURLConnection.HTTP_NO_CONTENT
-import java.net.HttpURLConnection.HTTP_OK
+import java.net.HttpURLConnection.*
 
 private const val HTTP_CONTINUE = 100
 
@@ -18,8 +16,8 @@ internal fun Response.hasBody(): Boolean {
 
     val responseCode = code()
     if ((responseCode < HTTP_CONTINUE || responseCode >= HTTP_OK) &&
-        (responseCode != HTTP_NO_CONTENT) &&
-        (responseCode != HTTP_NOT_MODIFIED)
+            (responseCode != HTTP_NO_CONTENT) &&
+            (responseCode != HTTP_NOT_MODIFIED)
     ) {
         return true
     }

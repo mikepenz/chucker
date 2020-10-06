@@ -1,10 +1,6 @@
 package com.chuckerteam.chucker.internal.support
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
-import android.graphics.Paint
+import android.graphics.*
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.palette.graphics.Palette
@@ -32,9 +28,9 @@ private fun Bitmap.replaceAlphaWithColor(@ColorInt color: Int): Bitmap {
 
 private fun Bitmap.getLuminance(@ColorInt alphaSubstitute: Int): Double? {
     val imagePalette = Palette.from(this)
-        .clearFilters()
-        .addFilter { rgb, _ -> (rgb != alphaSubstitute) }
-        .generate()
+            .clearFilters()
+            .addFilter { rgb, _ -> (rgb != alphaSubstitute) }
+            .generate()
     val dominantSwatch = imagePalette.dominantSwatch
     return dominantSwatch?.rgb?.let(ColorUtils::calculateLuminance)
 }

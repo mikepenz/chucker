@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
  * by this collector. The default is one week.
  */
 public class ChuckerCollector @JvmOverloads constructor(
-    context: Context,
-    public var showNotification: Boolean = true,
-    retentionPeriod: RetentionManager.Period = RetentionManager.Period.ONE_WEEK
+        context: Context,
+        public var showNotification: Boolean = true,
+        retentionPeriod: RetentionManager.Period = RetentionManager.Period.ONE_WEEK
 ) {
     private val retentionManager: RetentionManager = RetentionManager(context, retentionPeriod)
     private val notificationHelper: NotificationHelper = NotificationHelper(context)
@@ -38,9 +38,9 @@ public class ChuckerCollector @JvmOverloads constructor(
      * @param throwable The triggered [Throwable]
      */
     @Deprecated(
-        "This fun will be removed in 4.x release as part of Throwable functionality removal.",
-        ReplaceWith(""),
-        DeprecationLevel.WARNING
+            "This fun will be removed in 4.x release as part of Throwable functionality removal.",
+            ReplaceWith(""),
+            DeprecationLevel.WARNING
     )
     public fun onError(tag: String, throwable: Throwable) {
         val recordedThrowable = RecordedThrowable(tag, throwable)

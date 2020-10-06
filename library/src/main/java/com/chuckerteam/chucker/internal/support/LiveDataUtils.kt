@@ -7,8 +7,8 @@ import androidx.lifecycle.MediatorLiveData
 import java.util.concurrent.Executor
 
 internal fun <T1, T2, R> LiveData<T1>.combineLatest(
-    other: LiveData<T2>,
-    func: (T1, T2) -> R
+        other: LiveData<T2>,
+        func: (T1, T2) -> R
 ): LiveData<R> {
     return MediatorLiveData<R>().apply {
         var lastA: T1? = null
@@ -44,8 +44,8 @@ internal fun <T1, T2> LiveData<T1>.combineLatest(other: LiveData<T2>): LiveData<
 // This is needed in our case since we compare requests and responses which can be big
 // and result in frame drops.
 internal fun <T> LiveData<T>.distinctUntilChanged(
-    executor: Executor = ioExecutor(),
-    areEqual: (old: T, new: T) -> Boolean = { old, new -> old == new }
+        executor: Executor = ioExecutor(),
+        areEqual: (old: T, new: T) -> Boolean = { old, new -> old == new }
 ): LiveData<T> {
     val distinctMediator = MediatorLiveData<T>()
     var old = uninitializedToken

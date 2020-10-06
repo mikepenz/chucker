@@ -2,20 +2,8 @@ package com.chuckerteam.chucker.api
 
 import android.content.Context
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
-import com.chuckerteam.chucker.internal.support.CacheDirectoryProvider
-import com.chuckerteam.chucker.internal.support.DepletingSource
-import com.chuckerteam.chucker.internal.support.FileFactory
-import com.chuckerteam.chucker.internal.support.IOUtils
-import com.chuckerteam.chucker.internal.support.ReportingSink
-import com.chuckerteam.chucker.internal.support.TeeSource
-import com.chuckerteam.chucker.internal.support.contentType
-import com.chuckerteam.chucker.internal.support.hasBody
-import com.chuckerteam.chucker.internal.support.isGzipped
-import okhttp3.Headers
-import okhttp3.Interceptor
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.ResponseBody
+import com.chuckerteam.chucker.internal.support.*
+import okhttp3.*
 import okio.Buffer
 import okio.GzipSource
 import okio.Okio
@@ -23,7 +11,6 @@ import okio.Source
 import java.io.File
 import java.io.IOException
 import java.nio.charset.Charset
-import kotlin.jvm.Throws
 
 /**
  * An OkHttp Interceptor which persists and displays HTTP activity
@@ -42,12 +29,12 @@ import kotlin.jvm.Throws
  * with a `**` in the Chucker UI.
  */
 public class ChuckerInterceptor internal constructor(
-    private val context: Context,
-    private val collector: ChuckerCollector = ChuckerCollector(context),
-    private val maxContentLength: Long = 250000L,
-    private val cacheDirectoryProvider: CacheDirectoryProvider,
-    private val alwaysReadResponseBody: Boolean = false,
-    headersToRedact: Set<String> = emptySet(),
+        private val context: Context,
+        private val collector: ChuckerCollector = ChuckerCollector(context),
+        private val maxContentLength: Long = 250000L,
+        private val cacheDirectoryProvider: CacheDirectoryProvider,
+        private val alwaysReadResponseBody: Boolean = false,
+        headersToRedact: Set<String> = emptySet(),
 ) : Interceptor {
 
     /**
@@ -66,18 +53,18 @@ public class ChuckerInterceptor internal constructor(
      */
     @JvmOverloads
     public constructor(
-        context: Context,
-        collector: ChuckerCollector = ChuckerCollector(context),
-        maxContentLength: Long = 250000L,
-        headersToRedact: Set<String> = emptySet(),
-        alwaysReadResponseBody: Boolean = false,
+            context: Context,
+            collector: ChuckerCollector = ChuckerCollector(context),
+            maxContentLength: Long = 250000L,
+            headersToRedact: Set<String> = emptySet(),
+            alwaysReadResponseBody: Boolean = false,
     ) : this(
-        context = context,
-        collector = collector,
-        maxContentLength = maxContentLength,
-        cacheDirectoryProvider = { context.cacheDir },
-        alwaysReadResponseBody = alwaysReadResponseBody,
-        headersToRedact = headersToRedact,
+            context = context,
+            collector = collector,
+            maxContentLength = maxContentLength,
+            cacheDirectoryProvider = { context.cacheDir },
+            alwaysReadResponseBody = alwaysReadResponseBody,
+            headersToRedact = headersToRedact,
     )
 
     private val io: IOUtils = IOUtils(context)
@@ -150,8 +137,8 @@ public class ChuckerInterceptor internal constructor(
      * Processes [Response] metadata and populates corresponding fields of a [HttpTransaction].
      */
     private fun processResponseMetadata(
-        response: Response,
-        transaction: HttpTransaction
+            response: Response,
+            transaction: HttpTransaction
     ) {
         val responseEncodingIsSupported = io.bodyHasSupportedEncoding(response.headers().get(CONTENT_ENCODING))
 
@@ -184,8 +171,8 @@ public class ChuckerInterceptor internal constructor(
      * when the end user reads bytes form the [response].
      */
     private fun multiCastResponseBody(
-        response: Response,
-        transaction: HttpTransaction
+            response: Response,
+            transaction: HttpTransaction
     ): Response {
         val responseBody = response.body()
         if (!response.hasBody() || responseBody == null) {
@@ -197,16 +184,16 @@ public class ChuckerInterceptor internal constructor(
         val contentLength = responseBody.contentLength()
 
         val sideStream = ReportingSink(
-            createTempTransactionFile(),
-            ChuckerTransactionReportingSinkCallback(response, transaction),
-            maxContentLength
+                createTempTransactionFile(),
+                ChuckerTransactionReportingSinkCallback(response, transaction),
+                maxContentLength
         )
         var upstream: Source = TeeSource(responseBody.source(), sideStream)
         if (alwaysReadResponseBody) upstream = DepletingSource(upstream)
 
         return response.newBuilder()
-            .body(ResponseBody.create(contentType, contentLength, Okio.buffer(upstream)))
-            .build()
+                .body(ResponseBody.create(contentType, contentLength, Okio.buffer(upstream)))
+                .build()
     }
 
     private fun createTempTransactionFile(): File? {
@@ -220,9 +207,9 @@ public class ChuckerInterceptor internal constructor(
     }
 
     private fun processResponseBody(
-        response: Response,
-        responseBodyBuffer: Buffer,
-        transaction: HttpTransaction
+            response: Response,
+            responseBodyBuffer: Buffer,
+            transaction: HttpTransaction
     ) {
         val responseBody = response.body() ?: return
 
@@ -238,7 +225,7 @@ public class ChuckerInterceptor internal constructor(
             transaction.isResponseBodyPlainText = false
 
             val isImageContentType =
-                (contentType?.toString()?.contains(CONTENT_TYPE_IMAGE, ignoreCase = true) == true)
+                    (contentType?.toString()?.contains(CONTENT_TYPE_IMAGE, ignoreCase = true) == true)
 
             if (isImageContentType && (responseBodyBuffer.size() < MAX_BLOB_SIZE)) {
                 transaction.responseImageData = responseBodyBuffer.readByteArray()
@@ -258,8 +245,8 @@ public class ChuckerInterceptor internal constructor(
     }
 
     private inner class ChuckerTransactionReportingSinkCallback(
-        private val response: Response,
-        private val transaction: HttpTransaction
+            private val response: Response,
+            private val transaction: HttpTransaction
     ) : ReportingSink.Callback {
 
         override fun onClosed(file: File?, sourceByteCount: Long) {

@@ -12,11 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import com.chuckerteam.chucker.R
 import com.chuckerteam.chucker.databinding.ChuckerActivityTransactionBinding
 import com.chuckerteam.chucker.internal.data.entity.HttpTransaction
-import com.chuckerteam.chucker.internal.support.Sharable
-import com.chuckerteam.chucker.internal.support.TransactionCurlCommandSharable
-import com.chuckerteam.chucker.internal.support.TransactionDetailsSharable
-import com.chuckerteam.chucker.internal.support.shareAsFile
-import com.chuckerteam.chucker.internal.support.shareAsUtf8Text
+import com.chuckerteam.chucker.internal.support.*
 import com.chuckerteam.chucker.internal.ui.BaseChuckerActivity
 import kotlinx.coroutines.launch
 
@@ -42,8 +38,8 @@ internal class TransactionActivity : BaseChuckerActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel.transactionTitle.observe(
-            this,
-            Observer { transactionBinding.toolbarTitle.text = it }
+                this,
+                Observer { transactionBinding.toolbarTitle.text = it }
         )
     }
 
@@ -60,15 +56,15 @@ internal class TransactionActivity : BaseChuckerActivity() {
             return@setOnMenuItemClickListener true
         }
         viewModel.encodeUrl.observe(
-            this,
-            Observer { encode ->
-                val icon = if (encode) {
-                    R.drawable.chucker_ic_encoded_url_white
-                } else {
-                    R.drawable.chucker_ic_decoded_url_white
+                this,
+                Observer { encode ->
+                    val icon = if (encode) {
+                        R.drawable.chucker_ic_encoded_url_white
+                    } else {
+                        R.drawable.chucker_ic_decoded_url_white
+                    }
+                    encodeUrlMenuItem.setIcon(icon)
                 }
-                encodeUrlMenuItem.setIcon(icon)
-            }
         )
     }
 
@@ -96,9 +92,9 @@ internal class TransactionActivity : BaseChuckerActivity() {
         val sharable = block(transaction)
         lifecycleScope.launch {
             val shareIntent = sharable.shareAsUtf8Text(
-                activity = this@TransactionActivity,
-                intentTitle = getString(R.string.chucker_share_transaction_title),
-                intentSubject = getString(R.string.chucker_share_transaction_subject)
+                    activity = this@TransactionActivity,
+                    intentTitle = getString(R.string.chucker_share_transaction_title),
+                    intentSubject = getString(R.string.chucker_share_transaction_subject)
             )
             startActivity(shareIntent)
         }
@@ -115,11 +111,11 @@ internal class TransactionActivity : BaseChuckerActivity() {
         val sharable = block(transaction)
         lifecycleScope.launch {
             val shareIntent = sharable.shareAsFile(
-                activity = this@TransactionActivity,
-                fileName = EXPORT_FILE_NAME,
-                intentTitle = getString(R.string.chucker_share_transaction_title),
-                intentSubject = getString(R.string.chucker_share_transaction_subject),
-                clipDataLabel = "transaction"
+                    activity = this@TransactionActivity,
+                    fileName = EXPORT_FILE_NAME,
+                    intentTitle = getString(R.string.chucker_share_transaction_title),
+                    intentSubject = getString(R.string.chucker_share_transaction_subject),
+                    clipDataLabel = "transaction"
             )
             if (shareIntent != null) {
                 startActivity(shareIntent)
@@ -131,11 +127,11 @@ internal class TransactionActivity : BaseChuckerActivity() {
     private fun setupViewPager(viewPager: ViewPager) {
         viewPager.adapter = TransactionPagerAdapter(this, supportFragmentManager)
         viewPager.addOnPageChangeListener(
-            object : ViewPager.SimpleOnPageChangeListener() {
-                override fun onPageSelected(position: Int) {
-                    selectedTabPosition = position
+                object : ViewPager.SimpleOnPageChangeListener() {
+                    override fun onPageSelected(position: Int) {
+                        selectedTabPosition = position
+                    }
                 }
-            }
         )
         viewPager.currentItem = selectedTabPosition
     }

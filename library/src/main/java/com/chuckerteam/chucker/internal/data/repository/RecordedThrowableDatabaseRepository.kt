@@ -7,7 +7,7 @@ import com.chuckerteam.chucker.internal.data.room.ChuckerDatabase
 import com.chuckerteam.chucker.internal.support.distinctUntilChanged
 
 internal class RecordedThrowableDatabaseRepository(
-    private val database: ChuckerDatabase
+        private val database: ChuckerDatabase
 ) : RecordedThrowableRepository {
 
     override fun getRecordedThrowable(id: Long): LiveData<RecordedThrowable> {

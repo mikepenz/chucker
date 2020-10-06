@@ -14,8 +14,8 @@ import java.io.IOException
  * to a [sideStream].
  */
 internal class TeeSource(
-    private val upstream: Source,
-    private val sideStream: Sink
+        private val upstream: Source,
+        private val sideStream: Sink
 ) : Source {
     private val tempBuffer = Buffer()
     private var isFailure = false

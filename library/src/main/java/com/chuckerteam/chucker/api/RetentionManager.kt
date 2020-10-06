@@ -2,6 +2,7 @@ package com.chuckerteam.chucker.api
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.chuckerteam.chucker.api.RetentionManager.Period
 import com.chuckerteam.chucker.internal.data.repository.RepositoryProvider
 import com.chuckerteam.chucker.internal.support.Logger.info
 import kotlinx.coroutines.CoroutineScope
@@ -17,12 +18,13 @@ import java.util.concurrent.TimeUnit
  */
 @Suppress("MagicNumber")
 public class RetentionManager @JvmOverloads constructor(
-    context: Context,
-    retentionPeriod: Period = Period.ONE_WEEK
+        context: Context,
+        retentionPeriod: Period = Period.ONE_WEEK
 ) {
 
     // The actual retention period in milliseconds (default to ONE_WEEK)
     private val period: Long = toMillis(retentionPeriod)
+
     // How often the cleanup should happen
     private val cleanupFrequency: Long
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, 0)
@@ -86,10 +88,13 @@ public class RetentionManager @JvmOverloads constructor(
     public enum class Period {
         /** Retain data for the last hour. */
         ONE_HOUR,
+
         /** Retain data for the last day. */
         ONE_DAY,
+
         /** Retain data for the last week. */
         ONE_WEEK,
+
         /** Retain data forever. */
         FOREVER
     }

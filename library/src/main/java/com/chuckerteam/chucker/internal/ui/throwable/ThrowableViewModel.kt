@@ -7,14 +7,14 @@ import com.chuckerteam.chucker.internal.data.entity.RecordedThrowable
 import com.chuckerteam.chucker.internal.data.repository.RepositoryProvider
 
 internal class ThrowableViewModel(
-    throwableId: Long
+        throwableId: Long
 ) : ViewModel() {
 
     val throwable: LiveData<RecordedThrowable> = RepositoryProvider.throwable().getRecordedThrowable(throwableId)
 }
 
 internal class ThrowableViewModelFactory(
-    private val throwableId: Long = 0L
+        private val throwableId: Long = 0L
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         require(modelClass == ThrowableViewModel::class.java) { "Cannot create $modelClass" }

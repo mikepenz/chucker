@@ -16,9 +16,9 @@ import java.io.IOException
  * writing bytes.
  */
 internal class ReportingSink(
-    private val downstreamFile: File?,
-    private val callback: Callback,
-    private val writeByteLimit: Long = Long.MAX_VALUE
+        private val downstreamFile: File?,
+        private val callback: Callback,
+        private val writeByteLimit: Long = Long.MAX_VALUE
 ) : Sink {
     private var totalByteCount = 0L
     private var isFailure = false

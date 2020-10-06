@@ -11,18 +11,18 @@ import okhttp3.HttpUrl
  */
 @Suppress("LongParameterList")
 internal class HttpTransactionTuple(
-    @ColumnInfo(name = "id") var id: Long,
-    @ColumnInfo(name = "requestDate") var requestDate: Long?,
-    @ColumnInfo(name = "tookMs") var tookMs: Long?,
-    @ColumnInfo(name = "protocol") var protocol: String?,
-    @ColumnInfo(name = "method") var method: String?,
-    @ColumnInfo(name = "host") var host: String?,
-    @ColumnInfo(name = "path") var path: String?,
-    @ColumnInfo(name = "scheme") var scheme: String?,
-    @ColumnInfo(name = "responseCode") var responseCode: Int?,
-    @ColumnInfo(name = "requestPayloadSize") var requestPayloadSize: Long?,
-    @ColumnInfo(name = "responsePayloadSize") var responsePayloadSize: Long?,
-    @ColumnInfo(name = "error") var error: String?
+        @ColumnInfo(name = "id") var id: Long,
+        @ColumnInfo(name = "requestDate") var requestDate: Long?,
+        @ColumnInfo(name = "tookMs") var tookMs: Long?,
+        @ColumnInfo(name = "protocol") var protocol: String?,
+        @ColumnInfo(name = "method") var method: String?,
+        @ColumnInfo(name = "host") var host: String?,
+        @ColumnInfo(name = "path") var path: String?,
+        @ColumnInfo(name = "scheme") var scheme: String?,
+        @ColumnInfo(name = "responseCode") var responseCode: Int?,
+        @ColumnInfo(name = "requestPayloadSize") var requestPayloadSize: Long?,
+        @ColumnInfo(name = "responsePayloadSize") var responsePayloadSize: Long?,
+        @ColumnInfo(name = "error") var error: String?
 ) {
     val isSsl: Boolean get() = scheme.equals("https", ignoreCase = true)
 

@@ -3,11 +3,11 @@ package com.chuckerteam.chucker.internal.support
 import okhttp3.HttpUrl
 
 internal class FormattedUrl private constructor(
-    val scheme: String,
-    val host: String,
-    val port: Int,
-    val path: String,
-    val query: String
+        val scheme: String,
+        val host: String,
+        val port: Int,
+        val path: String,
+        val query: String
 ) {
     val pathWithQuery: String
         get() = if (query.isBlank()) {
@@ -50,22 +50,22 @@ internal class FormattedUrl private constructor(
         private fun encodedUrl(httpUrl: HttpUrl): FormattedUrl {
             val path = httpUrl.encodedPathSegments().joinToString("/")
             return FormattedUrl(
-                httpUrl.scheme(),
-                httpUrl.host(),
-                httpUrl.port(),
-                if (path.isNotBlank()) "/$path" else "",
-                httpUrl.encodedQuery().orEmpty()
+                    httpUrl.scheme(),
+                    httpUrl.host(),
+                    httpUrl.port(),
+                    if (path.isNotBlank()) "/$path" else "",
+                    httpUrl.encodedQuery().orEmpty()
             )
         }
 
         private fun decodedUrl(httpUrl: HttpUrl): FormattedUrl {
             val path = httpUrl.pathSegments().joinToString("/")
             return FormattedUrl(
-                httpUrl.scheme(),
-                httpUrl.host(),
-                httpUrl.port(),
-                if (path.isNotBlank()) "/$path" else "",
-                httpUrl.query().orEmpty()
+                    httpUrl.scheme(),
+                    httpUrl.host(),
+                    httpUrl.port(),
+                    if (path.isNotBlank()) "/$path" else "",
+                    httpUrl.query().orEmpty()
             )
         }
     }

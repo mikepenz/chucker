@@ -6,7 +6,7 @@ import okio.Buffer
 import okio.Source
 
 internal class TransactionCurlCommandSharable(
-    private val transaction: HttpTransaction,
+        private val transaction: HttpTransaction,
 ) : Sharable {
     override fun toSharableContent(context: Context): Source = Buffer().apply {
         var compressed = false
@@ -15,7 +15,7 @@ internal class TransactionCurlCommandSharable(
 
         headers?.forEach { header ->
             if ("Accept-Encoding".equals(header.name, ignoreCase = true) &&
-                "gzip".equals(header.value, ignoreCase = true)
+                    "gzip".equals(header.value, ignoreCase = true)
             ) {
                 compressed = true
             }

@@ -20,29 +20,29 @@ internal interface Sharable {
 }
 
 internal fun Sharable.toSharableUtf8Content(
-    context: Context,
+        context: Context,
 ) = Okio.buffer(toSharableContent(context)).use(BufferedSource::readUtf8)
 
 internal suspend fun Sharable.shareAsUtf8Text(
-    activity: Activity,
-    intentTitle: String,
-    intentSubject: String,
+        activity: Activity,
+        intentTitle: String,
+        intentSubject: String,
 ): Intent {
     val content = withContext(Dispatchers.Default) { toSharableUtf8Content(activity) }
     return ShareCompat.IntentBuilder.from(activity)
-        .setType("text/plain")
-        .setChooserTitle(intentTitle)
-        .setSubject(intentSubject)
-        .setText(content)
-        .createChooserIntent()
+            .setType("text/plain")
+            .setChooserTitle(intentTitle)
+            .setSubject(intentSubject)
+            .setText(content)
+            .createChooserIntent()
 }
 
 internal suspend fun Sharable.shareAsFile(
-    activity: Activity,
-    fileName: String,
-    intentTitle: String,
-    intentSubject: String,
-    clipDataLabel: String,
+        activity: Activity,
+        fileName: String,
+        intentTitle: String,
+        intentSubject: String,
+        clipDataLabel: String,
 ): Intent? {
     val cache = activity.cacheDir
     if (cache == null) {
@@ -64,16 +64,16 @@ internal suspend fun Sharable.shareAsFile(
     }
 
     val uri = FileProvider.getUriForFile(
-        activity,
-        "${activity.packageName}.com.chuckerteam.chucker.provider",
-        file
+            activity,
+            "${activity.packageName}.com.chuckerteam.chucker.provider",
+            file
     )
     val shareIntent = ShareCompat.IntentBuilder.from(activity)
-        .setType(activity.contentResolver.getType(uri))
-        .setChooserTitle(intentTitle)
-        .setSubject(intentSubject)
-        .setStream(uri)
-        .intent
+            .setType(activity.contentResolver.getType(uri))
+            .setChooserTitle(intentTitle)
+            .setSubject(intentSubject)
+            .setStream(uri)
+            .intent
     shareIntent.apply {
         clipData = ClipData.newRawUri(clipDataLabel, uri)
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
