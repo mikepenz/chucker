@@ -31,6 +31,8 @@ public class ChuckerInterceptor internal constructor(
         private val maxContentLength: Long = 250000L,
         private val cacheDirectoryProvider: CacheDirectoryProvider,
         private val alwaysReadResponseBody: Boolean = false,
+        private val okHttpInterceptor: Boolean = true,
+        private val superPoweredInterceptor: Boolean = false,
         headersToRedact: Set<String> = emptySet(),
 ) : Interceptor {
 
@@ -53,12 +55,16 @@ public class ChuckerInterceptor internal constructor(
             context: Context,
             collector: ChuckerCollector = ChuckerCollector(context),
             maxContentLength: Long = 250000L,
+            okHttpInterceptor: Boolean = true,
+            superPoweredInterceptor: Boolean = false,
             headersToRedact: Set<String> = emptySet(),
             alwaysReadResponseBody: Boolean = false,
     ) : this(
             context = context,
             collector = collector,
             maxContentLength = maxContentLength,
+            okHttpInterceptor = okHttpInterceptor,
+            superPoweredInterceptor = superPoweredInterceptor,
             cacheDirectoryProvider = { context.cacheDir },
             alwaysReadResponseBody = alwaysReadResponseBody,
             headersToRedact = headersToRedact,
@@ -78,11 +84,21 @@ public class ChuckerInterceptor internal constructor(
         val response: Response
         val transaction = HttpTransaction()
 
-        processRequest(request, transaction)
-        collector.onRequestSent(transaction)
-
+        val interceptedRequest = when {
+            okHttpInterceptor -> {
+                ChuckerOkHttpProcessRequestUtil.processRequest(collector, io, request, transaction)
+            }
+            superPoweredInterceptor -> {
+                ChuckerProcessRequestUtil.processRequest(collector, io, request, transaction)
+            }
+            else -> {
+                processRequest(request, transaction)
+                collector.onRequestSent(transaction)
+                request
+            }
+        }
         try {
-            response = chain.proceed(request)
+            response = chain.proceed(interceptedRequest)
         } catch (e: IOException) {
             transaction.error = e.toString()
             collector.onResponseReceived(transaction)
